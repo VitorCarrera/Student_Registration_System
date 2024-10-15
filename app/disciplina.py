@@ -33,7 +33,15 @@ class DisciplinaService:
             return 'Disciplina não encontrada.'
         except Exception as e:
             return f'Erro ao deletar disciplina: {str(e)}'
-        
+
+    def listar_disciplinas(self):
+        try:
+            disciplinas = DisciplinaDAO.listar_disciplinas()
+            if disciplinas:
+                return disciplinas
+            return 'Nenhuma disciplina encontrada'
+        except Exception as e:
+            return f'Erro ao listar disciplinas: {str(e)}'
 
     def gerar_codigo(self, nome):
             prefixo = nome.strip()[:3].upper()

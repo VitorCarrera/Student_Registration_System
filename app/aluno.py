@@ -33,6 +33,15 @@ class AlunoService:
         except Exception as e:
             return f"Erro ao deletar aluno: {str(e)}"
 
+    def listar_disciplinas(self):
+        try:
+            alunos = AlunoDAO.listar_alunos()
+            if alunos:
+                return alunos
+            return 'Nenhum aluno encontrada'
+        except Exception as e:
+            return f'Erro ao listar alunos: {str(e)}'
+
     def gerar_matricula(self, nome):
         prefixo = nome.strip()[:3].upper()
         sufixo = str(random.randint(1000, 9999))
