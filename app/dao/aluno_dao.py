@@ -10,7 +10,7 @@ class AlunoDAO():
             raise Exception(f'Erro ao criar aluno: {e}')
 
     @staticmethod
-    def buscar_aluno( id_aluno):
+    def buscar_aluno(id_aluno):
         try:
             aluno = Aluno.get(Aluno.id == id_aluno)
             return aluno
