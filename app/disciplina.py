@@ -1,6 +1,7 @@
 from app.models import Disciplina
 from app.dao.disciplina_dao import DisciplinaDAO
 from random import randint
+from peewee import IntegrityError
 
 class DisciplinaService:
 
@@ -44,9 +45,19 @@ class DisciplinaService:
             return f'Erro ao listar disciplinas: {str(e)}'
 
     def gerar_codigo(self, nome):
-            prefixo = nome.strip()[:3].upper()
-            sufixo = str(randint(100,999))
-            return f'{prefixo}-{sufixo}'
+        codigo = None
+        while not codigo:
+            try:
+                prefixo = nome.strip()[:3].upper()
+                sufixo = str(randint(100,999))
+                novo_codigo = f'{prefixo}-{sufixo}'
+
+                if not Disciplina.select().where(Disciplina.codigo == novo_codigo).exists():
+                    codigo = novo_codigo
+
+            except IntegrityError:
+                continue
+        return codigo                 
   
     def validar_disciplina(self, nome, professor, carga_horaria):
         return len(nome.strip()) > 0 and len(professor.strip()) > 0 and carga_horaria > 0
