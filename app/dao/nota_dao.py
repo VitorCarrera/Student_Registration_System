@@ -1,5 +1,5 @@
 from app.models import Nota
-class NotaDao:
+class NotaDAO:
     @staticmethod
     def criar_nota(aluno, disciplina, nota_1, nota_2):
         try:
