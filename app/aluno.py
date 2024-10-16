@@ -1,6 +1,7 @@
 from app.models import Aluno
 import random
 from app.dao.aluno_dao import AlunoDAO
+from peewee import IntegrityError
 
 class AlunoService:
     def criar_aluno(self, nome, idade, curso):
@@ -43,9 +44,18 @@ class AlunoService:
             return f'Erro ao listar alunos: {str(e)}'
 
     def gerar_matricula(self, nome):
-        prefixo = nome.strip()[:3].upper()
-        sufixo = str(random.randint(1000, 9999))
-        return f'{prefixo}-{sufixo}'
+        matricula = None
+        while not matricula:
+            try:
+                prefixo = nome.strip()[:3].upper()
+                sufixo = str(random.randint(1000, 9999))
+                nova_matricula = f'{prefixo}-{sufixo}'
+
+                if not Aluno.select().where(Aluno.matricula == nova_matricula).exists():
+                    matricula = nova_matricula
+            except IntegrityError:
+                continue
+        return matricula
     
     def validar_nome(self, nome):
         return isinstance(nome, str) and len(nome.strip()) > 0
